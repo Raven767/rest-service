@@ -1,0 +1,154 @@
+openapi: 3.0.1
+info:
+  title: Lab 3
+  version: 1.0.0
+servers:
+  - url: http://localhost:8443
+    description: Generated server url
+paths:
+  /public/rest/stores:
+    get:
+      tags:
+        - store-rest-controller
+      summary: Получить перечень магазинов
+      description: Получить перечень всех магазинов
+      operationId: browse
+      responses:
+        '200':
+          description: Успешное выполнение
+          content:
+            '*/*':
+              schema:
+                type: object
+        '401':
+          description: Требуется аутентификация
+          content:
+            '*/*':
+              schema:
+                type: object
+        '403':
+          description: Аутентификация предоставлена, но у пользователя нет доступа
+          content:
+            '*/*':
+              schema:
+                type: object
+        '404':
+          description: Ресурс не найден
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+        - store-rest-controller
+      summary: Создать новый магазин
+      description: Создать новый магазин с указанным именем
+      operationId: add
+      parameters:
+        - name: name
+          in: query
+          description: Название магазина
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешное выполнение
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StoreDTO'
+        '401':
+          description: Требуется аутентификация
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StoreDTO'
+        '403':
+          description: Аутентификация предоставлена, но у пользователя нет доступа
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StoreDTO'
+        '404':
+          description: Ресурс не найден
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StoreDTO'
+  /public/rest/stores/{id}:
+    get:
+      tags:
+        - store-rest-controller
+      summary: Поиск магазина по идентификатору
+      description: Поиск магазина по его идентификатору
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор магазина
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Успешное выполнение
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StoreDTO'
+        '401':
+          description: Требуется аутентификация
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StoreDTO'
+        '403':
+          description: Аутентификация предоставлена, но у пользователя нет доступа
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StoreDTO'
+        '404':
+          description: Ресурс не найден
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StoreDTO'
+    delete:
+      tags:
+        - store-rest-controller
+      summary: Удаление магазина
+      description: Магазин может быть удален, если с ним не связаны продукты
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор магазина
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Успешное выполнение
+        '401':
+          description: Требуется аутентификация
+        '403':
+          description: Аутентификация предоставлена, но у пользователя нет доступа
+        '404':
+          description: Ресурс не найден
+components:
+  schemas:
+    StoreDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор магазина
+          format: int32
+        name:
+          type: string
+          description: Название магазина
+      description: Магазин 
